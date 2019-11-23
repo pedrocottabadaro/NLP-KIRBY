@@ -1,3 +1,3 @@
-Given a Bank Account 
-And balance is 100 
-Then Bank Account Balance is 100 
+Given a bank account with initial balance of 0
+When we deposit an amount of 100 into the account
+Then the balance of the account should be 100

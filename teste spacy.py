@@ -1,39 +1,213 @@
 import spacy
-from spacy import displacy
-arquivo = open('entrada.txt', 'r')
 nlp = spacy.load('en_core_web_sm')
-cenario=[]
-palavras=[]
+Vclasses ={}
+Vmetodos={}
+VvalorAtrib={}
+Vatrib={}
+Vparametro={}
+
+Ratribclasse=[-1,-1,-1,-1,-1]
+Rmetodoclasse=[-1,-1,-1,-1]
+z=3
+
+
+contadorAtributos=0
+contadorMetodos=0
+contadorAtributosValor=0
+contadorClasse=0
+contadorParametro=0
+
+RContadorMetodo=0
+RContadorAtributo=0
 palavrasArquivo=[]
-contador=""
-
-i=0
-x=0
-
+arquivo = open('entrada.txt', 'r')
 for linha in arquivo:
         linha = linha.strip()
         palavrasArquivo.append(linha)
 arquivo.close
-arquivoSaida=open('saida.txt','w')
+
+
+vwith=False
+metodo=""
+
+parametro=""
+
+qual=""
+classe=""
+todas=""
+print(todas)
+vetorStringAtributos=""
+vetorStringClasses=""
+
+print(palavrasArquivo)
 for words in palavrasArquivo:
-    doc = nlp(words)
-    for token in doc:
-        if(token.is_stop==False or token.text=="Given"or token.text=="Then" or token.text=="When"or token.text=="And"):
-            palavras.insert(i,token.text)
-            if(token.text=="Then"or token.text=="And" or token.text=="When"):
-                contador=""
-            contador=contador+token.text+" "
-            i=1+i
-    cenario.insert(x, contador)
-    arquivoSaida.write(cenario[x]+'\n')
-   # print(cenario[x])
-    x=x+1
-    
+    doc=nlp(words)
+    for token in doc :
+
+        if(token.text!='=' and token.text!=""):
+            if(words.__contains__('Given')):
+
+                qual = "Given"
+
+                if(token.pos_!='DET' and token.is_stop==False and token.pos_!="ADJ"or token.text=="with"):
+                     if(token.text=="with"):
+                        vwith=True
+
+                     elif(token.text!="Given"):
+
+                         if (not vwith):
+
+                             if (not token.text in Vclasses):
+
+                                 vetorStringClasses = vetorStringClasses + str(token.text)
 
 
-#print(cenario)
-arquivoSaida.close
 
+                             if (token.text in Vclasses):
+                                 classe = token.text
+
+                         elif(vwith):
+
+
+                                if(token.pos_ != "NUM" and token.text != "False" and token.text != "True"):
+                                    vetorStringAtributos=str(token.text)
+
+
+
+
+                                elif((vetorStringAtributos in Vatrib)==False):
+                                    VvalorAtrib[contadorAtributosValor] = str(token.text)
+
+            if (words.__contains__('When')):
+                qual="When"
+                if (token.pos_ != 'DET' and token.is_stop == False and token.pos_ != "ADJ" and token.pos != "PRON"):
+                    if(token.pos_=='VERB'):
+                        metodo=str(token.text)
+                    elif(token.pos_=='NUM'):
+                        parametro=str(token.text)
+                    elif (token.pos_ == 'NOUN'):
+                        if((not(token.text in Vclasses)) ):
+                            vetorStringClasses = str(vetorStringClasses) + str(token.text)
+
+                        elif(Vclasses.__contains__(token.text)):
+                            classe=str(token.text)
+
+            if (words.__contains__('Then')):
+
+                if (token.pos_ != 'DET' and token.is_stop == False and token.pos_ != "AUX" or token.text == "ADP"):
+                    if(token.pos_=="NOUN"):
+
+                        if (token.text in Vclasses):
+                            print(token.text)
+                            classe = token.text
+                    else:
+
+                        if (token.pos_ != "NUM" and token.text != "False" and token.text != "True"):
+                            vetorStringAtributos = str(token.text)
+
+                        elif ((vetorStringAtributos in Vatrib) == False):
+                            VvalorAtrib[contadorAtributosValor] = str(token.text)
+
+    if(qual=="Given"):
+
+        if( not(Vclasses.__contains__(vetorStringClasses))and vetorStringClasses!=""):
+
+            Vclasses[contadorClasse]=vetorStringClasses
+            Ratribclasse[RContadorAtributo]=contadorClasse
+            print(Ratribclasse[RContadorAtributo])
+            contadorClasse=contadorClasse+1
+            RContadorAtributo=RContadorAtributo+1
+        if(Ratribclasse[RContadorAtributo]==-1 and Vatrib.__sizeof__()==Ratribclasse):
+            for i in Vclasses:
+                if (Vclasses[i].__contains__(classe)):
+                     Ratribclasse[RContadorAtributo]=i
+            RContadorAtributo=RContadorAtributo+1
+
+        if((vetorStringAtributos in Vatrib)== False and vetorStringAtributos!=''):
+            Vatrib[contadorAtributos]=vetorStringAtributos
+            contadorAtributos=contadorAtributos+1
+            contadorAtributosValor = contadorAtributosValor + 1
+
+        vetorStringAtributos = ""
+        vetorStringClasses = ""
+        vwith = False
+
+    elif(qual=="When"):
+      if(metodo!=""):
+        Vmetodos[contadorMetodos] = metodo
+        contadorMetodos = contadorMetodos + 1
+        Vparametro[contadorParametro] = parametro
+        contadorParametro = contadorParametro + 1
+        if ((not (vetorStringClasses in Vclasses)) and vetorStringClasses != ''and (str(vetorStringClasses) in todas)):
+            Vclasses[contadorClasse] = vetorStringClasses
+            Rmetodoclasse[RContadorMetodo]=contadorClasse
+            RContadorMetodo=RContadorMetodo+1
+            contadorClasse = contadorClasse + 1
+        elif(Rmetodoclasse[RContadorMetodo]==-1):
+                for i in Vclasses:
+
+                    if (Vclasses[i].__contains__(classe)):
+                        Rmetodoclasse[RContadorMetodo]=i
+
+                RContadorMetodo = RContadorMetodo + 1
+
+        vetorStringClasses = ""
+        vwith = False
+        metodo=""
+
+
+    elif(qual=="Then"):
+        print(788888)
+        if (Ratribclasse[RContadorAtributo] == -1 and Vatrib.__sizeof__() == Ratribclasse):
+            for i in Vclasses:
+                if (Vclasses[i].__contains__(classe)):
+                    Ratribclasse[RContadorAtributo] = i
+            RContadorAtributo = RContadorAtributo + 1
+
+        if ((vetorStringAtributos in Vatrib) == False and vetorStringAtributos != ''):
+            Vatrib[contadorAtributos] = vetorStringAtributos
+            contadorAtributos = contadorAtributos + 1
+            contadorAtributosValor = contadorAtributosValor + 1
+
+        vetorStringAtributos = ""
+        vetorStringClasses = ""
+        vwith = False
+
+
+
+
+
+print("VETOR DE CLASSES")
+print(Vclasses)
+print("VETOR DE METODOS")
+print(Vmetodos)
+print("REFERENCIA A CLASSE")
+print(Rmetodoclasse)
+print("VETOR DE PARAMETROS")
+print(Vparametro)
+print("VETOR DE ATRIBUTOS")
+print(Vatrib)
+print("REFERENCIA A CLASSE")
+print(Ratribclasse)
+print("VALOR ATRIBUTOS")
+print(VvalorAtrib)
+
+
+# Scenario: deposit money to empty account
+# Given a bank account with initial balance of 0
+# When we deposit an amount of 100 into the account
+# Then the balance of the account should be 100
+#
+# Scenario: withdraw money from a bank account
+# Given a bank account with initial balance of 1000
+# When we withdraw "100" dollars from the account
+# Then the balance of the account should be 900
+#
+# Scenario: deposit and withdraw money from a bank account
+# Given an account with balance = 100
+# When an amount of 20 is deposited into the bank account
+# And we remove "40" from the bank account
+# Then the balance of the account should be 80
 
 
 
