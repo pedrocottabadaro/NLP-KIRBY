@@ -35,7 +35,7 @@ parametro=""
 qual=""
 classe=""
 todas=""
-print(todas)
+
 vetorStringAtributos=""
 vetorStringClasses=""
 
@@ -85,38 +85,31 @@ for words in palavrasArquivo:
                         metodo=str(token.text)
                     elif(token.pos_=='NUM'):
                         parametro=str(token.text)
-                    elif (token.pos_ == 'NOUN'):
-                        if((not(token.text in Vclasses)) ):
-                            vetorStringClasses = str(vetorStringClasses) + str(token.text)
 
-                        elif(Vclasses.__contains__(token.text)):
-                            classe=str(token.text)
 
             if (words.__contains__('Then')):
+                qual="Then"
+                if (token.pos_ != 'DET' and token.is_stop == False and token.pos_ != "AUX" or token.text == "ADP" and token.text!=""):
 
-                if (token.pos_ != 'DET' and token.is_stop == False and token.pos_ != "AUX" or token.text == "ADP"):
-                    if(token.pos_=="NOUN"):
-
-                        if (token.text in Vclasses):
-                            print(token.text)
-                            classe = token.text
-                    else:
-
+                    if(not(token.text in todas)):
+                        print(token.text)
                         if (token.pos_ != "NUM" and token.text != "False" and token.text != "True"):
                             vetorStringAtributos = str(token.text)
 
-                        elif ((vetorStringAtributos in Vatrib) == False):
+
+
+                        else:
                             VvalorAtrib[contadorAtributosValor] = str(token.text)
 
     if(qual=="Given"):
 
-        if( not(Vclasses.__contains__(vetorStringClasses))and vetorStringClasses!=""):
+        if( not(Vclasses.__contains__(vetorStringClasses))and vetorStringClasses!="" and not(str(vetorStringClasses) in todas) ):
 
             Vclasses[contadorClasse]=vetorStringClasses
             Ratribclasse[RContadorAtributo]=contadorClasse
-            print(Ratribclasse[RContadorAtributo])
             contadorClasse=contadorClasse+1
             RContadorAtributo=RContadorAtributo+1
+            todas=vetorStringClasses+todas
         if(Ratribclasse[RContadorAtributo]==-1 and Vatrib.__sizeof__()==Ratribclasse):
             for i in Vclasses:
                 if (Vclasses[i].__contains__(classe)):
@@ -128,49 +121,45 @@ for words in palavrasArquivo:
             contadorAtributos=contadorAtributos+1
             contadorAtributosValor = contadorAtributosValor + 1
 
+        classe=vetorStringClasses
         vetorStringAtributos = ""
         vetorStringClasses = ""
         vwith = False
 
     elif(qual=="When"):
+
+
       if(metodo!=""):
+
         Vmetodos[contadorMetodos] = metodo
         contadorMetodos = contadorMetodos + 1
         Vparametro[contadorParametro] = parametro
         contadorParametro = contadorParametro + 1
-        if ((not (vetorStringClasses in Vclasses)) and vetorStringClasses != ''and (str(vetorStringClasses) in todas)):
-            Vclasses[contadorClasse] = vetorStringClasses
-            Rmetodoclasse[RContadorMetodo]=contadorClasse
-            RContadorMetodo=RContadorMetodo+1
-            contadorClasse = contadorClasse + 1
-        elif(Rmetodoclasse[RContadorMetodo]==-1):
-                for i in Vclasses:
+        for i in Vclasses:
+            if(Vclasses[i]==classe):
+                Rmetodoclasse[RContadorMetodo] =i
+                RContadorMetodo=RContadorMetodo+1
 
-                    if (Vclasses[i].__contains__(classe)):
-                        Rmetodoclasse[RContadorMetodo]=i
-
-                RContadorMetodo = RContadorMetodo + 1
-
-        vetorStringClasses = ""
         vwith = False
         metodo=""
 
 
     elif(qual=="Then"):
-        print(788888)
-        if (Ratribclasse[RContadorAtributo] == -1 and Vatrib.__sizeof__() == Ratribclasse):
-            for i in Vclasses:
-                if (Vclasses[i].__contains__(classe)):
-                    Ratribclasse[RContadorAtributo] = i
-            RContadorAtributo = RContadorAtributo + 1
 
-        if ((vetorStringAtributos in Vatrib) == False and vetorStringAtributos != ''):
+
+
+        if (vetorStringAtributos != ''):
             Vatrib[contadorAtributos] = vetorStringAtributos
             contadorAtributos = contadorAtributos + 1
             contadorAtributosValor = contadorAtributosValor + 1
+            for i in Vclasses:
+                if (Vclasses[i].__contains__(classe)):
+                    Ratribclasse[RContadorAtributo] = i
+                    RContadorAtributo = RContadorAtributo + 1
+
 
         vetorStringAtributos = ""
-        vetorStringClasses = ""
+
         vwith = False
 
 
