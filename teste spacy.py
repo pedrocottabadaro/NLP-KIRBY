@@ -1,6 +1,9 @@
 #WEBSITE PARA INSTALAR A BIBLIOTECA
 #https://spacy.io/usage
 
+#LISTA PARA FAZER
+#MEXER COM O THEN,VERIFICAR O DA CLASSE E VER PQ TA DANDO -1 NA REFERENCIA DO METODOS AS VEZES
+
 import spacy
 nlp = spacy.load('en_core_web_sm')
 Vclasses ={}
