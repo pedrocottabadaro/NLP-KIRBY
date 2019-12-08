@@ -1,3 +1,9 @@
+#WEBSITE PARA INSTALAR A BIBLIOTECA
+#https://spacy.io/usage
+
+#LISTA PARA FAZER
+#MEXER COM O THEN,VERIFICAR O DA CLASSE E VER PQ TA DANDO -1 NA REFERENCIA DO METODOS AS VEZES
+
 import spacy
 nlp = spacy.load('en_core_web_sm')
 Vclasses ={}
@@ -20,6 +26,7 @@ contadorParametro=0
 RContadorMetodo=0
 RContadorAtributo=0
 palavrasArquivo=[]
+#atribui os valores do arquivo a um vetor
 arquivo = open('entrada.txt', 'r')
 for linha in arquivo:
         linha = linha.strip()
@@ -40,75 +47,111 @@ vetorStringAtributos=""
 vetorStringClasses=""
 
 print(palavrasArquivo)
+#para todas frases do vetor
 for words in palavrasArquivo:
+    #botar toda frase para ser analisada, e assim pegar as caracteristicas de cada palavra
     doc=nlp(words)
     for token in doc :
 
         if(token.text!='=' and token.text!=""):
+                #Se a primeira palavra e o Given, entao signifca que sera a criacao de classes e atributos
             if(words.__contains__('Given')):
-
+                #qual utilizado para a analise la embaixo
                 qual = "Given"
-
+                #Qualquer determinante,adjetivo ou preposicoes nao vou considerar
+                #A variavel with e utilizda para analisar todas palavras depois do with(que serao diferentes das palavras antes dele.
+                #A estrutura sempre comeca com o "nome da classe with atributo", entao tudo depois do with serao as informacoes dos atributos
                 if(token.pos_!='DET' and token.is_stop==False and token.pos_!="ADJ"or token.text=="with"):
                      if(token.text=="with"):
                         vwith=True
 
                      elif(token.text!="Given"):
-
+                               #se nao tiver chegado ate o with ainda, sera a classe.
+                               
                          if (not vwith):
-
+                                 #verificar se ja possui uma classe com esse nome
                              if (not token.text in Vclasses):
 
                                  vetorStringClasses = vetorStringClasses + str(token.text)+" "
 
 
 
+<<<<<<< HEAD
 
 
+=======
+                                 #SE tiver, apenas pego o nome dela
+                             if (token.text in Vclasses):
+                                 classe = token.text
+                        #se passou do with pode ser valor numerico e o nome do atributo
+>>>>>>> 450f353fa558fafb1621fe56645543169f721233
                          elif(vwith):
 
-
+                                 #condicao para o nome do atributo
                                 if(token.pos_ != "NUM" and token.text != "False" and token.text != "True"):
                                     vetorStringAtributos=str(token.text)
 
 
 
-
+                                #se for valor numerico ou false e true eu atribuo
                                 elif((vetorStringAtributos in Vatrib)==False):
                                     VvalorAtrib[contadorAtributosValor] = str(token.text)
-
+                #o WHen serao os metodos e parametros
             if (words.__contains__('When')):
                 qual="When"
+                #When sera a parte dos metodos,entao iremos tirar pronomes,adjetivos,preposicoes e determinantes
                 if (token.pos_ != 'DET' and token.is_stop == False and token.pos_ != "ADJ" and token.pos != "PRON"):
+                        #todas casos tinham o verbo como o nome do metodo(mas isso pode mudar)
                     if(token.pos_=='VERB'):
                         metodo=str(token.text)
+                        #se for um numero sera o valor do parametro
                     elif(token.pos_=='NUM'):
                         parametro=str(token.text)
 
-
+             #O then sera a parte de atualizacao dos valores dos atributos
             if (words.__contains__('Then')):
                 qual="Then"
+                #descarta os determinantes,preposicoes,auxiliares,adverbio
                 if (token.pos_ != 'DET' and token.is_stop == False and token.pos_ != "AUX" or token.text == "ADP" and token.text!=""):
 
+<<<<<<< HEAD
                     if(token.text==atributo or token.pos_=="NUM" or token.text == "False" or token.text == "True"):
 
                         if (token.text==atributo):
+=======
+                     
+                    if(not(token.text in todas)):
+                       #atribui o nome do atributo a variavel para a analise
+                        if (token.pos_ != "NUM" and token.text != "False" and token.text != "True"):
+>>>>>>> 450f353fa558fafb1621fe56645543169f721233
                             vetorStringAtributos = str(token.text)
 
 
 
                         else:
+                            #atribui o valor numerico do atributo
                             VvalorAtrib[contadorAtributosValor] = str(token.text)
 
     if(qual=="Given"):
-
+        #Verifica se a classe esta no vetor de classes, se nao tiver ira ser atribuida junto com o atributo
         if( not(Vclasses.__contains__(vetorStringClasses))and vetorStringClasses!="" and not(str(vetorStringClasses) in todas) ):
 
             Vclasses[contadorClasse]=vetorStringClasses
             contadorClasse=contadorClasse+1
             todas=vetorStringClasses+todas
+<<<<<<< HEAD
             classe=vetorStringClasses
 
+=======
+        #se a referencia doa atributo para a classe e -1, significa que a classe ja existe,
+        #entao temos que achar o indice da classe para entao fazer a referencia
+        if(Ratribclasse[RContadorAtributo]==-1 and Vatrib.__sizeof__()==Ratribclasse):
+            for i in Vclasses:
+                if (Vclasses[i].__contains__(classe)):
+                     Ratribclasse[RContadorAtributo]=i
+            RContadorAtributo=RContadorAtributo+1
+        #verifica se o atributo ja existe
+>>>>>>> 450f353fa558fafb1621fe56645543169f721233
         if((vetorStringAtributos in Vatrib)== False and vetorStringAtributos!=''):
             print(vetorStringAtributos)
             Vatrib[contadorAtributos]=vetorStringAtributos
@@ -129,7 +172,8 @@ for words in palavrasArquivo:
 
     elif(qual=="When"):
 
-
+        #when sera a atribuicao dos metedo no vetor,fazendo a referencia do metodo a classe,
+        #fazendo a referencia do parametro ao metodo e atribuindo o valor numerico do parametro a a ele
       if(metodo!=""):
 
         Vmetodos[contadorMetodos] = metodo
@@ -148,7 +192,8 @@ for words in palavrasArquivo:
     elif(qual=="Then"):
 
 
-
+            #THen sera a atualizacao do valor do atributo
+             #o indice da classe e achado e entao feita a referencia do atributo a classe
         if (vetorStringAtributos != ''):
             print(vetorStringAtributos)
             Vatrib[contadorAtributos] = vetorStringAtributos
