@@ -76,15 +76,14 @@ for words in palavrasArquivo:
 
 
 
-<<<<<<< HEAD
 
 
-=======
+
                                  #SE tiver, apenas pego o nome dela
                              if (token.text in Vclasses):
                                  classe = token.text
                         #se passou do with pode ser valor numerico e o nome do atributo
->>>>>>> 450f353fa558fafb1621fe56645543169f721233
+
                          elif(vwith):
 
                                  #condicao para o nome do atributo
@@ -114,16 +113,11 @@ for words in palavrasArquivo:
                 #descarta os determinantes,preposicoes,auxiliares,adverbio
                 if (token.pos_ != 'DET' and token.is_stop == False and token.pos_ != "AUX" or token.text == "ADP" and token.text!=""):
 
-<<<<<<< HEAD
+
                     if(token.text==atributo or token.pos_=="NUM" or token.text == "False" or token.text == "True"):
 
                         if (token.text==atributo):
-=======
-                     
-                    if(not(token.text in todas)):
-                       #atribui o nome do atributo a variavel para a analise
-                        if (token.pos_ != "NUM" and token.text != "False" and token.text != "True"):
->>>>>>> 450f353fa558fafb1621fe56645543169f721233
+
                             vetorStringAtributos = str(token.text)
 
 
@@ -139,10 +133,10 @@ for words in palavrasArquivo:
             Vclasses[contadorClasse]=vetorStringClasses
             contadorClasse=contadorClasse+1
             todas=vetorStringClasses+todas
-<<<<<<< HEAD
+
             classe=vetorStringClasses
 
-=======
+
         #se a referencia doa atributo para a classe e -1, significa que a classe ja existe,
         #entao temos que achar o indice da classe para entao fazer a referencia
         if(Ratribclasse[RContadorAtributo]==-1 and Vatrib.__sizeof__()==Ratribclasse):
@@ -151,15 +145,14 @@ for words in palavrasArquivo:
                      Ratribclasse[RContadorAtributo]=i
             RContadorAtributo=RContadorAtributo+1
         #verifica se o atributo ja existe
->>>>>>> 450f353fa558fafb1621fe56645543169f721233
+
         if((vetorStringAtributos in Vatrib)== False and vetorStringAtributos!=''):
-            print(vetorStringAtributos)
+
             Vatrib[contadorAtributos]=vetorStringAtributos
             contadorAtributos=contadorAtributos+1
             contadorAtributosValor = contadorAtributosValor + 1
             for i in Vclasses:
                 if(Vclasses[i]==classe):
-                    print(i)
                     Ratribclasse[RContadorAtributo] = i
                     RContadorAtributo = RContadorAtributo + 1
 
@@ -195,13 +188,13 @@ for words in palavrasArquivo:
             #THen sera a atualizacao do valor do atributo
              #o indice da classe e achado e entao feita a referencia do atributo a classe
         if (vetorStringAtributos != ''):
-            print(vetorStringAtributos)
+ 
             Vatrib[contadorAtributos] = vetorStringAtributos
             contadorAtributos = contadorAtributos + 1
             contadorAtributosValor = contadorAtributosValor + 1
             for i in Vclasses:
                 if(Vclasses[i]==classe):
-                    print(i)
+
                     Ratribclasse[RContadorAtributo] = i
                     RContadorAtributo = RContadorAtributo + 1
 
